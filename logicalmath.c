@@ -2,7 +2,11 @@
 const unsigned int UINT_ALL_SET = ~0;
 #ifndef UINT_MAX
 const unsigned int UINT_MAX = ~0;
+#endif
+#ifndef INT_MAX
 const int INT_MAX = (int)(((unsigned int)~0) >> 1);
+#endif
+#ifndef INT_MIN
 const int INT_MIN = ~(((unsigned int)~0) >> 1);
 #endif
 const unsigned int INT_HIGH_BIT = ~(((unsigned int)~0) >> 1);
