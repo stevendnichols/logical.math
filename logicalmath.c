@@ -11,6 +11,17 @@ const int INT_MIN = ~(((unsigned int)~0) >> 1);
 #endif
 const unsigned int INT_HIGH_BIT = ~(((unsigned int)~0) >> 1);
 
+int add(int m, int n);
+int negative(int n);
+int subtract(int m, int n);
+int increment(int n);
+int decrement(int n);
+int equal(int m, int n);
+int notEqual(int m, int n);
+int greaterThan(int m, int n);
+int lesserThan(int m, int n);
+int multiply(int m, int n);
+
 int add(int m, int n)
 {
    int carry = (m & n) << 1;
