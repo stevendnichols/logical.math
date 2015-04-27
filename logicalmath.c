@@ -20,7 +20,10 @@ int equal(int m, int n);
 int notEqual(int m, int n);
 int greaterThan(int m, int n);
 int lesserThan(int m, int n);
+int unsignedGreaterThan(unsigned int m, unsigned int n);
 int multiply(int m, int n);
+int divide(int m, int n);
+int absValue(int n);
 
 int add(int m, int n)
 {
