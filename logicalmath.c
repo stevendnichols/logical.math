@@ -86,6 +86,19 @@ int lesserThan(int m, int n)
    return greaterThan(n, m);
 }
 
+int unsignedGreaterThan(unsigned int m, unsigned int n)
+{
+  unsigned int s = INT_HIGH_BIT;
+  
+  while(s) {
+      if((m ^ n) & s) {
+          return m & s;
+      }
+      s>>=1;
+  }
+  return 0;
+}
+   
 int multiply(int m, int n)
 {
   int sum=0, shiftbit=1;
@@ -100,6 +113,48 @@ int multiply(int m, int n)
   return sum;
 }
 
+int absValue(int n)
+{
+  return (n & INT_HIGH_BIT) ? negative(n) : n;
+}
+
+int divide(int m, int n)
+{
+  unsigned int shiftbit = INT_HIGH_BIT, sum = 0, tmpSum = 0;
+  int sign = 1; 
+  unsigned int um = absValue(m), un = absValue(n);
+  if((m^n) & shiftbit) {
+    sign = negative(1);
+  }
+  if(equal(m, INT_MIN)) {
+    sign = negative(sign);
+  }
+      
+  if(!n) {
+    exit(1); /* divide by zero error */    
+  }
+
+  while(shiftbit && !(shiftbit & um)) {  
+    shiftbit >>= 1;
+  }
+
+  while(shiftbit && unsignedGreaterThan(multiply(shiftbit,un),um)) {
+    shiftbit >>= 1;
+  }
+  sum = add(sum, shiftbit);
+
+  shiftbit >>= 1;
+  while(shiftbit) {
+    tmpSum = add(sum, shiftbit);
+    while(shiftbit && unsignedGreaterThan(multiply(tmpSum,un),um)) {
+        shiftbit >>= 1;
+        tmpSum = add(sum, shiftbit);
+    }
+    sum = tmpSum;
+    shiftbit >>= 1;
+  }  
+  return multiply(sum, sign); 
+}
 
 
 
