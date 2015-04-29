@@ -24,6 +24,54 @@ int unsignedGreaterThan(unsigned int m, unsigned int n);
 int multiply(int m, int n);
 int divide(int m, int n);
 int absValue(int n);
+int highBit(unsigned int n);
+int highBitIsOdd(unsigned int n);
+int divStartBit(unsigned int n);
+
+int highBit(unsigned int n) 
+{
+  unsigned int b = INT_HIGH_BIT;
+  while(b) {
+    if(b & n) {
+      break;
+    }
+    b>>=1;
+  }
+  return b;
+}
+
+int highBitIsOdd(unsigned int n)
+{
+  int i=1;
+  while(n) {
+    n >>= 1;
+    i = increment(i);
+  }
+  return i & 1;
+}
+
+int divStartBit(unsigned int n)
+{
+  unsigned int startbit = 1;
+  unsigned int m = INT_MAX;
+  if(!n) {
+    exit(1); /* division by zero */
+  }
+  n = absValue(n);
+  if(equal(INT_MIN, n)) {
+    return 1;
+  }
+  if(highBitIsOdd(m)^highBitIsOdd(n)) {
+    m>>=1;
+  }
+  while(unsignedGreaterThan(m^n, m&n)) {
+    m>>=1;
+    n<<=1;
+    startbit<<=1; 
+    startbit<<=1; /* why? because you may only use numbers 1 and 0 */
+  }
+  return startbit;  
+}
 
 int add(int m, int n)
 {
@@ -120,22 +168,18 @@ int absValue(int n)
 
 int divide(int m, int n)
 {
-  unsigned int shiftbit = INT_HIGH_BIT, sum = 0, tmpSum = 0;
+  unsigned int sum = 0, tmpSum = 0;
   int sign = 1; 
   unsigned int um = absValue(m), un = absValue(n);
-  if((m^n) & shiftbit) {
+  unsigned int shiftbit = divStartBit(un);
+  if((m^n) & INT_HIGH_BIT) {
     sign = negative(1);
   }
-  if(equal(m, INT_MIN)) {
-    sign = negative(sign);
-  }
-      
   if(!n) {
     exit(1); /* divide by zero error */    
   }
-
-  while(shiftbit && !(shiftbit & um)) {  
-    shiftbit >>= 1;
+  if(equal(m&n, INT_MIN)) {
+    return 1;
   }
 
   while(shiftbit && unsignedGreaterThan(multiply(shiftbit,un),um)) {
@@ -143,7 +187,6 @@ int divide(int m, int n)
   }
   sum = add(sum, shiftbit);
 
-  shiftbit >>= 1;
   while(shiftbit) {
     tmpSum = add(sum, shiftbit);
     while(shiftbit && unsignedGreaterThan(multiply(tmpSum,un),um)) {
@@ -153,6 +196,9 @@ int divide(int m, int n)
     sum = tmpSum;
     shiftbit >>= 1;
   }  
+  if(lesserThan(sum, 0)) {
+    sum = negative(sum);
+  }
   return multiply(sum, sign); 
 }
 
