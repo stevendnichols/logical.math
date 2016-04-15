@@ -202,6 +202,10 @@ int divide(int m, int n)
   return multiply(sum, sign); 
 }
 
+<<<<<<< HEAD
 /* test */
+=======
+/* test 1 */
+>>>>>>> origin/master
 
 
